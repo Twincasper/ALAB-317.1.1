@@ -71,6 +71,7 @@ class NCycle<T> {
   }
 
   private areBothArrays(): boolean {
+    // No need for parameters because the context is this
     return Array.isArray(this.make) && Array.isArray(this.model);
   }
 
@@ -94,9 +95,12 @@ class NCycle<T> {
     if (!this.isArray(this.make) && !this.isArray(this.model)) {
       this.printPair(this.make, this.model);
     } else if (this.areBothArrays()) {
-      // Had to do another check if they're arrays to avoid element implicitly being seen as any
-      if (this.isArray(this.make) && this.isArray(this.model) && this.make[index] && this.model[index]) {
-        this.printPair(this.make[index], this.model[index], index);
+      // Even though we know they're arrays, they need to be asserted as arrays for type-checking as typescript cannot see that in the scope of this function
+      const makeArray = this.make as T[];
+      const modelArray = this.model as T[];
+      // Check if the indices line up and are not out of bounds
+      if (makeArray[index] && modelArray[index]) {
+        this.printPair(makeArray[index], modelArray[index], index);
       } else {
         console.log("This NCycle was not created properly.");
       }
