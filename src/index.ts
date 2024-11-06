@@ -94,7 +94,8 @@ class NCycle<T> {
     if (!this.isArray(this.make) && !this.isArray(this.model)) {
       this.printPair(this.make, this.model);
     } else if (this.areBothArrays()) {
-      if (this.make[index] && this.model[index]) {
+      // Had to do another check if they're arrays to avoid element implicitly being seen as any
+      if (this.isArray(this.make) && this.isArray(this.model) && this.make[index] && this.model[index]) {
         this.printPair(this.make[index], this.model[index], index);
       } else {
         console.log("This NCycle was not created properly.");
@@ -107,8 +108,11 @@ class NCycle<T> {
   // Main printAll function
   printAll(): void {
     if (this.areArraysMatchingLength()) {
-      for (let i = 0; i < this.make.length; i++) {
-        this.printPair(this.make[i], this.model[i], i);
+      // Need to explicitly check if they're arrays to avoid element implicitly being seen as any
+      if (this.isArray(this.make) && this.isArray(this.model)) {
+        for (let i = 0; i < this.make.length; i++) {
+          this.printPair(this.make[i], this.model[i], i);
+        }
       }
     } else if (!this.isArray(this.make) && !this.isArray(this.model)) {
       this.printPair(this.make, this.model);
